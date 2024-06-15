@@ -3,16 +3,21 @@ import { updateCheckRade } from '../api/supabase'
 import { Checkbox, TableCell } from '@mui/material'
 
 interface RadeCheckboxProps {
+  bossName: string
   isChecked: boolean
   characterName: string
 }
 
-export function RadeCheckbox({ isChecked, characterName }: RadeCheckboxProps) {
+export function RadeCheckbox({
+  bossName,
+  isChecked,
+  characterName
+}: RadeCheckboxProps) {
   const [isRadeCheck, setIsRadeCheck] = useState(isChecked)
 
   const handleClickChecked = async () => {
     try {
-      const res = await updateCheckRade(isRadeCheck, characterName)
+      const res = await updateCheckRade(isRadeCheck, characterName, bossName)
 
       console.log(res)
       if (res) {

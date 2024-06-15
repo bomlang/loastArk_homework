@@ -7,18 +7,18 @@ export const signUpSupabaseWithEmail = async (
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
-      password
-      //   options: {
-      //     emailRedirectTo: ''
-      //  }
+      password,
+      options: {
+        // emailRedirectTo: 'http://localhost:5173/'
+      }
     })
 
     if (error) {
       console.error('회원가입 오류 :', error.message)
-      return error
+      return { success: false, error }
     }
 
-    return data
+    return { success: true, data }
   } catch (error) {
     console.error('회원가입 중 예상치 못한 오류가 발생하였습니다.', error)
   }
@@ -33,11 +33,13 @@ export const signinUser = async (email: string, password: string) => {
 
     if (error) {
       console.error('로그인 오류 :', error)
+      return { success: false, error }
     }
 
-    return data
+    return { success: true, data }
   } catch (error) {
     console.error('로그인 중 예상치 못한 오류가 발생하였습니다.', error)
+    return { success: false, error }
   }
 }
 

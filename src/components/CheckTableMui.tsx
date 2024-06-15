@@ -40,6 +40,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   }
 }))
 
+const StyledFigure = styled('figure')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontSize: '14px',
+  fontWeight: '700'
+})
+
 export function CheckTableMui() {
   const URL = 'https://developer-lostark.game.onstove.com'
   const headers = {
@@ -128,7 +138,7 @@ export function CheckTableMui() {
                 <span>{char.CharacterName}</span>
               </TableCell>
               <TableCell>
-                <figure>
+                <StyledFigure>
                   <img
                     src={`https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/${jobShumbnail(
                       char.CharacterClassName
@@ -136,44 +146,53 @@ export function CheckTableMui() {
                     alt={`${jobShumbnail(char.CharacterClassName)}.png`}
                   />
                   <figcaption>{char.CharacterClassName}</figcaption>
-                </figure>
+                </StyledFigure>
               </TableCell>
               <TableCell>
                 <span>{char.ItemMaxLevel}</span>
               </TableCell>
               <RadeCheckbox
+                bossName="Valtan"
                 isChecked={char.bossData.Valtan}
                 characterName={char.CharacterName}
               />
               <RadeCheckbox
+                bossName={'Biackiss'}
                 isChecked={char.bossData.Biackiss}
                 characterName={char.CharacterName}
               />
               <RadeCheckbox
+                bossName={'Kouku_Saton'}
                 isChecked={char.bossData.Kouku_Saton}
                 characterName={char.CharacterName}
               />
               <RadeCheckbox
+                bossName={'Abrelshud'}
                 isChecked={char.bossData.Abrelshud}
                 characterName={char.CharacterName}
               />
               <RadeCheckbox
+                bossName={'Kayangel'}
                 isChecked={char.bossData.Kayangel}
                 characterName={char.CharacterName}
               />
               <RadeCheckbox
+                bossName={'Illiakan'}
                 isChecked={char.bossData.Illiakan}
                 characterName={char.CharacterName}
               />
               <RadeCheckbox
+                bossName={'Ivory_Tower'}
                 isChecked={char.bossData.Ivory_Tower}
                 characterName={char.CharacterName}
               />
               <RadeCheckbox
+                bossName={'Kamen'}
                 isChecked={char.bossData.Kamen}
                 characterName={char.CharacterName}
               />
               <RadeCheckbox
+                bossName={'Echidna'}
                 isChecked={char.bossData.Echidna}
                 characterName={char.CharacterName}
               />

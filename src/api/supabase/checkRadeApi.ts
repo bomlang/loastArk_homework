@@ -22,15 +22,13 @@ export const loadCheckRade = async (nickname: string) => {
 
 export const updateCheckRade = async (
   isChecked: boolean,
-  characterName: string
+  characterName: string,
+  bossName: string
 ) => {
   try {
-    console.log(isChecked)
-    console.log(characterName)
-
     const { data, error } = await supabase
       .from('bossRade')
-      .update({ Valtan: !isChecked })
+      .update({ [bossName]: !isChecked })
       .eq('userCharName', characterName)
       .select()
 
