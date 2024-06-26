@@ -12,5 +12,5 @@ export interface Characters {
   ItemMaxLevel: string
   PvpGradeName: string
   ServerName: string
-  bossData: checkRade
+  bossData: checkRade[]
 }

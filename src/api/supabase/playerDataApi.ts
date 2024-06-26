@@ -19,3 +19,26 @@ export const getPlayerData = async (): Promise<PlayerData[] | null> => {
     return null
   }
 }
+
+export const addCharFromPlaterData = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('player')
+      .update({
+        charList: ['하오문여제', '기상술사하러왔어', '물몸이라약해요']
+      })
+      .eq('username', '호')
+      .select()
+
+    if (error) {
+      console.error('플레이어의 캐릭터 추가 오류', error)
+    }
+
+    return data
+  } catch (error) {
+    console.error(
+      '플레이어의 캐릭터를 추가하는데 예상치 못한 오류가 발생하였습니다.',
+      error
+    )
+  }
+}

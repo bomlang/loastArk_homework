@@ -6,6 +6,8 @@ import { CheckTableMui } from '../components'
 import { styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../zustand/authStore'
+import { getLoastArkCharData } from '../api/loastArkAPI/getCharDataAPI'
+import { addCharFromPlaterData } from '../api/supabase/playerDataApi'
 
 const StyledBox = styled(Box)({
   display: 'flex',
@@ -42,10 +44,17 @@ export default function Home() {
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
-  const handleCharacterRegistration = () => {
+  const handleCharacterRegistration = async () => {
     if (inputRef.current) {
       const value = inputRef.current.value
-      console.log(value)
+      // console.log(value)
+
+      const res = await getLoastArkCharData(value)
+      if (res) {
+        console.log(res)
+        const registerChar = await addCharFromPlaterData()
+        console.log(registerChar)
+      }
     }
   }
 

@@ -64,41 +64,24 @@ export function CheckTableMui() {
       try {
         const playerData = await getPlayerData()
         if (playerData) {
-          const charDataPromises = playerData.map(async player => {
-            const nicknames = player.charList.split(',')
-            const characterDataPromises = nicknames.map(async nickname => {
+          const characterDataPromises = playerData[0].charList.map(
+            async charName => {
               const response = await axios.get(
-                `${URL}/armories/characters/${encodeURI(
-                  nickname.trim()
-                )}/profiles`,
+                `${URL}/armories/characters/${encodeURI(charName)}/profiles`,
                 { headers }
               )
-              return response.data
-            })
-            const characterData = await Promise.all(characterDataPromises)
-            return { characterData }
-          })
-          const charDataResults = await Promise.all(charDataPromises)
 
-          const charNames = charDataResults[0].characterData.map(
-            name => name.CharacterName
+              const bossData = await loadCheckRade(charName)
+              return {
+                ...response.data,
+                bossData
+              }
+            }
           )
 
-          const checkBossDataPromises = charNames.map(async nickname => {
-            const bossData = await loadCheckRade(nickname.trim())
-            return bossData
-          })
+          const charactersData = await Promise.all(characterDataPromises)
 
-          const checkBossData = await Promise.all(checkBossDataPromises)
-
-          const mergedData = charDataResults[0].characterData.map(char => {
-            const bossData = checkBossData
-              .flat()
-              .find(boss => boss.userCharName === char.CharacterName)
-            return { ...char, bossData }
-          })
-
-          setMergeCheckData(mergedData)
+          setMergeCheckData(charactersData)
         }
       } catch (error) {
         console.error(
@@ -132,72 +115,73 @@ export function CheckTableMui() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {mergeCharData?.map(char => (
-            <StyledTableRow key={char.CharacterLevel}>
-              <TableCell align="right">
-                <span>{char.CharacterName}</span>
-              </TableCell>
-              <TableCell>
-                <StyledFigure>
-                  <img
-                    src={`https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/${jobShumbnail(
-                      char.CharacterClassName
-                    )}.png`}
-                    alt={`${jobShumbnail(char.CharacterClassName)}.png`}
-                  />
-                  <figcaption>{char.CharacterClassName}</figcaption>
-                </StyledFigure>
-              </TableCell>
-              <TableCell>
-                <span>{char.ItemMaxLevel}</span>
-              </TableCell>
-              <RadeCheckbox
-                bossName="Valtan"
-                isChecked={char.bossData.Valtan}
-                characterName={char.CharacterName}
-              />
-              <RadeCheckbox
-                bossName={'Biackiss'}
-                isChecked={char.bossData.Biackiss}
-                characterName={char.CharacterName}
-              />
-              <RadeCheckbox
-                bossName={'Kouku_Saton'}
-                isChecked={char.bossData.Kouku_Saton}
-                characterName={char.CharacterName}
-              />
-              <RadeCheckbox
-                bossName={'Abrelshud'}
-                isChecked={char.bossData.Abrelshud}
-                characterName={char.CharacterName}
-              />
-              <RadeCheckbox
-                bossName={'Kayangel'}
-                isChecked={char.bossData.Kayangel}
-                characterName={char.CharacterName}
-              />
-              <RadeCheckbox
-                bossName={'Illiakan'}
-                isChecked={char.bossData.Illiakan}
-                characterName={char.CharacterName}
-              />
-              <RadeCheckbox
-                bossName={'Ivory_Tower'}
-                isChecked={char.bossData.Ivory_Tower}
-                characterName={char.CharacterName}
-              />
-              <RadeCheckbox
-                bossName={'Kamen'}
-                isChecked={char.bossData.Kamen}
-                characterName={char.CharacterName}
-              />
-              <RadeCheckbox
-                bossName={'Echidna'}
-                isChecked={char.bossData.Echidna}
-                characterName={char.CharacterName}
-              />
-            </StyledTableRow>
-          ))}
+          {mergeCharData &&
+            mergeCharData?.map(char => (
+              <StyledTableRow key={char.CharacterLevel}>
+                <TableCell align="right">
+                  <span>{char.CharacterName}</span>
+                </TableCell>
+                <TableCell>
+                  <StyledFigure>
+                    <img
+                      src={`https://cdn-lostark.game.onstove.com/2018/obt/assets/images/common/thumb/${jobShumbnail(
+                        char.CharacterClassName
+                      )}.png`}
+                      alt={`${jobShumbnail(char.CharacterClassName)}.png`}
+                    />
+                    <figcaption>{char.CharacterClassName}</figcaption>
+                  </StyledFigure>
+                </TableCell>
+                <TableCell>
+                  <span>{char.ItemMaxLevel}</span>
+                </TableCell>
+                <RadeCheckbox
+                  bossName="Valtan"
+                  isChecked={char.bossData[0].Valtan}
+                  characterName={char.CharacterName}
+                />
+                <RadeCheckbox
+                  bossName={'Biackiss'}
+                  isChecked={char.bossData[0].Biackiss}
+                  characterName={char.CharacterName}
+                />
+                <RadeCheckbox
+                  bossName={'Kouku_Saton'}
+                  isChecked={char.bossData[0].Kouku_Saton}
+                  characterName={char.CharacterName}
+                />
+                <RadeCheckbox
+                  bossName={'Abrelshud'}
+                  isChecked={char.bossData[0].Abrelshud}
+                  characterName={char.CharacterName}
+                />
+                <RadeCheckbox
+                  bossName={'Kayangel'}
+                  isChecked={char.bossData[0].Kayangel}
+                  characterName={char.CharacterName}
+                />
+                <RadeCheckbox
+                  bossName={'Illiakan'}
+                  isChecked={char.bossData[0].Illiakan}
+                  characterName={char.CharacterName}
+                />
+                <RadeCheckbox
+                  bossName={'Ivory_Tower'}
+                  isChecked={char.bossData[0].Ivory_Tower}
+                  characterName={char.CharacterName}
+                />
+                <RadeCheckbox
+                  bossName={'Kamen'}
+                  isChecked={char.bossData[0].Kamen}
+                  characterName={char.CharacterName}
+                />
+                <RadeCheckbox
+                  bossName={'Echidna'}
+                  isChecked={char.bossData[0].Echidna}
+                  characterName={char.CharacterName}
+                />
+              </StyledTableRow>
+            ))}
         </TableBody>
       </Table>
     </TableContainer>
