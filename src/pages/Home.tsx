@@ -1,11 +1,12 @@
 import Modal from '@mui/material/Modal'
-import { useEffect, useRef, useState } from 'react'
 import { Header, Footer } from '../layout'
-import { Box, Button, TextField, Typography } from '@mui/material'
 import { CheckTableMui } from '../components'
 import { styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
 import { useAuthStore } from '../zustand/authStore'
+import { insertRadeRowData } from '../api/supabase'
+import { Box, Button, TextField, Typography } from '@mui/material'
 import { getLoastArkCharData } from '../api/loastArkAPI/getCharDataAPI'
 import { addCharFromPlaterData } from '../api/supabase/playerDataApi'
 
@@ -41,19 +42,23 @@ export default function Home() {
   const userToken = useAuthStore(state => state.userToken)
 
   const [open, setOpen] = useState(false)
+  const [charList, setCharList] = useState<string[]>([])
+
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
 
   const handleCharacterRegistration = async () => {
     if (inputRef.current) {
       const value = inputRef.current.value
-      // console.log(value)
 
       const res = await getLoastArkCharData(value)
       if (res) {
-        console.log(res)
-        const registerChar = await addCharFromPlaterData()
-        console.log(registerChar)
+        const registerChar = await addCharFromPlaterData(value, '호')
+        if (registerChar) {
+          await insertRadeRowData(value)
+          setCharList(prevCharList => [...prevCharList, value])
+          handleClose()
+        }
       }
     }
   }
@@ -66,7 +71,7 @@ export default function Home() {
     }
 
     verifyLoginStatus()
-  }, [])
+  }, [userToken, navigate])
 
   return (
     <>
@@ -109,7 +114,7 @@ export default function Home() {
             <StyledButton variant="contained">친구들의 숙제</StyledButton>
           </StyledBox>
 
-          <CheckTableMui />
+          <CheckTableMui charList={charList} />
         </section>
       </main>
       <Footer />

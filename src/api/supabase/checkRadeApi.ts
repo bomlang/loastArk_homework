@@ -42,28 +42,28 @@ export const updateCheckRade = async (
   }
 }
 
-const rowData = {
-  userCharName: '기상',
-  Valtan: true,
-  Biackiss: false,
-  Kouku_Saton: true,
-  Abrelshud: false,
-  Kayangel: false,
-  Illiakan: true,
-  Ivory_Tower: true,
-  Kamen: false,
-  Echidna: true
-}
+// const rowData = {
+//   userCharName: '기상',
+//   Valtan: true,
+//   Biackiss: false,
+//   Kouku_Saton: true,
+//   Abrelshud: false,
+//   Kayangel: false,
+//   Illiakan: true,
+//   Ivory_Tower: true,
+//   Kamen: false,
+//   Echidna: true
+// }
 
-export const insertRadeRowData = async () => {
+export const insertRadeRowData = async (charNameToAdd: string) => {
   try {
-    const { data, error } = await supabase.from('bossRade').insert([rowData])
+    const { error } = await supabase
+      .from('bossRade')
+      .insert({ userCharName: charNameToAdd })
 
     if (error) {
       console.error('데이터 행 생성 오류:', error)
     }
-
-    return data
   } catch (error) {
     console.error('데이터 행 생성 중 오류가 발생하였습니다.', error)
   }

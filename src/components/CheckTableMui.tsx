@@ -50,7 +50,11 @@ const StyledFigure = styled('figure')({
   fontWeight: '700'
 })
 
-export function CheckTableMui() {
+interface checkTableProps {
+  charList: string[]
+}
+
+export function CheckTableMui({ charList }: checkTableProps) {
   const URL = 'https://developer-lostark.game.onstove.com'
   const headers = {
     accept: 'application/json',
@@ -91,7 +95,7 @@ export function CheckTableMui() {
       }
     }
     supabaseFetch()
-  }, [])
+  }, [charList])
 
   return (
     <TableContainer component={Paper}>

@@ -20,15 +20,41 @@ export const getPlayerData = async (): Promise<PlayerData[] | null> => {
   }
 }
 
-export const addCharFromPlaterData = async () => {
+const getPlayerCharListData = async (username: string) => {
+  const { data, error } = await supabase
+    .from('player')
+    .select('charList')
+    .eq('username', username)
+    .single()
+
+  if (error) {
+    console.error('플레이어 데이터를 불러오는 중 오류 발생:', error)
+    return null
+  }
+
+  return data.charList
+}
+
+export const addCharFromPlaterData = async (
+  charNameToAdd: string,
+  username: string
+) => {
   try {
+    const latestCharList = await getPlayerCharListData(username)
+
+    if (latestCharList.includes(charNameToAdd)) {
+      console.error('중복된 캐릭터 닉네임입니다.')
+      return { error: '이미 존재하는 캐릭터 닉네임입니다.' }
+    }
+
     const { data, error } = await supabase
       .from('player')
       .update({
-        charList: ['하오문여제', '기상술사하러왔어', '물몸이라약해요']
+        charList: [...latestCharList, charNameToAdd]
       })
-      .eq('username', '호')
-      .select()
+      .eq('username', username)
+      .select('charList')
+      .single()
 
     if (error) {
       console.error('플레이어의 캐릭터 추가 오류', error)
