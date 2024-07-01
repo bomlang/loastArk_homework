@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { supabase } from './client'
-// import { insertPlayer } from './playerDataApi'
+import { useAuthStore } from '../../zustand/authStore'
 
 export const signUpSupabaseWithEmail = async (
   // username: string,
@@ -39,7 +39,7 @@ export const getUser = async (accessToken: string) => {
       }
     )
 
-    return response
+    return response.data
   } catch (error) {
     console.error('사용자 정보를 가져오는데 실패하였습니다.:', error)
     return null
@@ -56,6 +56,9 @@ export const signinUser = async (email: string, password: string) => {
     if (error) {
       console.error('로그인 오류 :', error)
       return { success: false, error }
+    } else {
+      sessionStorage.setItem('userToken', data.session.refresh_token)
+      useAuthStore.getState().setUserToken(data.session.access_token)
     }
 
     return { success: true, data }
@@ -74,5 +77,34 @@ export const singOutUser = async () => {
     }
   } catch (error) {
     console.error('로그아웃 중 예상치 못한 오류가 발생하였습니다.', error)
+  }
+}
+
+export const refreshAccessToken = async (refreshToken: string) => {
+  const { setUserToken, clearUserToken } = useAuthStore.getState()
+  try {
+    const response = await axios.post(
+      'https://ukvtwsfrzgcxhfkuqjan.supabase.co/auth/v1/token?grant_type=refresh_token',
+      { refresh_token: refreshToken },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${refreshToken}`
+        }
+      }
+    )
+
+    const newAccessToken = response.data.access_token
+    if (newAccessToken) {
+      setUserToken(newAccessToken)
+      return newAccessToken
+    } else {
+      clearUserToken()
+      return null
+    }
+  } catch (error) {
+    console.error('토큰 갱신 중 오류 발생:', error)
+    clearUserToken()
+    return null
   }
 }

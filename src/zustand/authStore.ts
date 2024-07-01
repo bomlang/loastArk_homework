@@ -5,8 +5,16 @@ interface AuthStore {
   setUserToken: (token: string) => void
   clearUserToken: () => void
 }
+
 export const useAuthStore = create<AuthStore>(set => ({
   userToken: sessionStorage.getItem('userToken'),
-  setUserToken: (token: string) => set({ userToken: token }),
-  clearUserToken: () => set({ userToken: null })
+  setUserToken: (token: string) => {
+    sessionStorage.setItem('userToken', token)
+    set({ userToken: token })
+  },
+  clearUserToken: () => {
+    sessionStorage.removeItem('userToken')
+    sessionStorage.removeItem('refreshToken')
+    set({ userToken: null })
+  }
 }))

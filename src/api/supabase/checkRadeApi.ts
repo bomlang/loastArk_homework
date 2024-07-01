@@ -1,22 +1,28 @@
 import { supabase } from './client'
+import { CheckRade } from '../../types'
 
-export const loadCheckRade = async (nickname: string) => {
+export const loadCheckRade = async (
+  nickname: string
+): Promise<CheckRade | null> => {
   try {
-    const { data: bossRade, error } = await supabase
+    const { data, error } = await supabase
       .from('bossRade')
       .select('*')
       .eq('userCharName', nickname)
+      .single()
 
     if (error) {
       console.error('레이드 데이터 로딩 오류 :', error)
+      return null
     }
 
-    return bossRade
+    return data
   } catch (error) {
     console.error(
       '레이드 데이터를 불러오는 중 예상치 못한 오류가 발생하였습니다.',
       error
     )
+    return null
   }
 }
 

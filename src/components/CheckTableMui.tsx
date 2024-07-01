@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { Characters } from '../types'
 import Table from '@mui/material/Table'
 import Paper from '@mui/material/Paper'
@@ -9,11 +8,12 @@ import TableRow from '@mui/material/TableRow'
 import { RadeCheckbox } from './RadeCheckbox'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
-import { getUser, loadCheckRade } from '../api/supabase'
-import TableContainer from '@mui/material/TableContainer'
-import { getPlayerData, getPlayerUsername } from '../api/supabase/playerDataApi'
-import TableCell, { tableCellClasses } from '@mui/material/TableCell'
 import { useAuthStore } from '../zustand/authStore'
+import TableContainer from '@mui/material/TableContainer'
+import TableCell, { tableCellClasses } from '@mui/material/TableCell'
+import { getLoastArkCharData } from '../api/loastArkAPI/getCharDataAPI'
+import { getUser, loadCheckRade, refreshAccessToken } from '../api/supabase'
+import { getPlayerData, getPlayerUsername } from '../api/supabase/playerDataApi'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -56,57 +56,44 @@ interface checkTableProps {
 }
 
 export function CheckTableMui({ charList }: checkTableProps) {
-  const URL = 'https://developer-lostark.game.onstove.com'
-  const headers = {
-    accept: 'application/json',
-    authorization: `bearer ${import.meta.env.VITE_PUBLIC_LOASTARK_API_KEY}`
-  }
-
+  const { userToken } = useAuthStore()
   const [mergeCharData, setMergeCheckData] = useState<Characters[] | null>(null)
-  const { userToken: token } = useAuthStore()
 
   useEffect(() => {
-    const supabaseFetch = async () => {
+    const supabaseFetch = async (accessToken: string) => {
       try {
-        const userData = await getUser(token as string)
-        console.log(userData)
-        console.log(token)
+        const userData = await getUser(accessToken)
+        const username = await getPlayerUsername(userData.email as string)
+        const playerData = await getPlayerData(username)
 
-        const username = await getPlayerUsername(userData?.user.email as string)
-        // console.log(username)
-
-        const playerData = await getPlayerData(username as string)
-
-        // 이 부분에서 어떤플레이어인지 로그인정보를 확인한다.
         if (playerData) {
-          const characterDataPromises = playerData.charList.map(
-            async charName => {
-              const response = await axios.get(
-                `${URL}/armories/characters/${encodeURI(charName)}/profiles`,
-                { headers }
-              )
-
+          const characterDataPromises = await Promise.all(
+            playerData.charList.map(async charName => {
+              const charactorsData = await getLoastArkCharData(charName)
               const bossData = await loadCheckRade(charName)
-              return {
-                ...response.data,
-                bossData
-              }
-            }
+
+              return { ...charactorsData, bossData }
+            })
           )
-
-          const charactersData = await Promise.all(characterDataPromises)
-
-          setMergeCheckData(charactersData)
+          setMergeCheckData(characterDataPromises as Characters[])
         }
       } catch (error) {
-        console.error(
-          '플레이어의 데이터를 가져오는 중 예상치 못한 오류가 발생하였습니다.',
-          error
-        )
+        console.error('플레이어 데이터를 가져오는 중 오류 발생:', error)
       }
     }
-    supabaseFetch()
-  }, [charList])
+
+    const refreshToken = sessionStorage.getItem('refreshToken')
+
+    if (!userToken && refreshToken) {
+      refreshAccessToken(refreshToken).then(newAccessToken => {
+        if (newAccessToken) {
+          supabaseFetch(newAccessToken)
+        }
+      })
+    } else if (userToken) {
+      supabaseFetch(userToken)
+    }
+  }, [charList, userToken])
 
   return (
     <TableContainer component={Paper}>
@@ -131,8 +118,8 @@ export function CheckTableMui({ charList }: checkTableProps) {
         </TableHead>
         <TableBody>
           {mergeCharData &&
-            mergeCharData?.map(char => (
-              <StyledTableRow key={char.CharacterLevel}>
+            mergeCharData?.map((char, index) => (
+              <StyledTableRow key={index}>
                 <TableCell align="right">
                   <span>{char.CharacterName}</span>
                 </TableCell>
@@ -152,47 +139,47 @@ export function CheckTableMui({ charList }: checkTableProps) {
                 </TableCell>
                 <RadeCheckbox
                   bossName="Valtan"
-                  isChecked={char.bossData[0].Valtan}
+                  isChecked={char.bossData.Valtan}
                   characterName={char.CharacterName}
                 />
                 <RadeCheckbox
                   bossName={'Biackiss'}
-                  isChecked={char.bossData[0].Biackiss}
+                  isChecked={char.bossData.Biackiss}
                   characterName={char.CharacterName}
                 />
                 <RadeCheckbox
                   bossName={'Kouku_Saton'}
-                  isChecked={char.bossData[0].Kouku_Saton}
+                  isChecked={char.bossData.Kouku_Saton}
                   characterName={char.CharacterName}
                 />
                 <RadeCheckbox
                   bossName={'Abrelshud'}
-                  isChecked={char.bossData[0].Abrelshud}
+                  isChecked={char.bossData.Abrelshud}
                   characterName={char.CharacterName}
                 />
                 <RadeCheckbox
                   bossName={'Kayangel'}
-                  isChecked={char.bossData[0].Kayangel}
+                  isChecked={char.bossData.Kayangel}
                   characterName={char.CharacterName}
                 />
                 <RadeCheckbox
                   bossName={'Illiakan'}
-                  isChecked={char.bossData[0].Illiakan}
+                  isChecked={char.bossData.Illiakan}
                   characterName={char.CharacterName}
                 />
                 <RadeCheckbox
                   bossName={'Ivory_Tower'}
-                  isChecked={char.bossData[0].Ivory_Tower}
+                  isChecked={char.bossData.Ivory_Tower}
                   characterName={char.CharacterName}
                 />
                 <RadeCheckbox
                   bossName={'Kamen'}
-                  isChecked={char.bossData[0].Kamen}
+                  isChecked={char.bossData.Kamen}
                   characterName={char.CharacterName}
                 />
                 <RadeCheckbox
                   bossName={'Echidna'}
-                  isChecked={char.bossData[0].Echidna}
+                  isChecked={char.bossData.Echidna}
                   characterName={char.CharacterName}
                 />
               </StyledTableRow>

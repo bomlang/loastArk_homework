@@ -59,17 +59,7 @@ export default function Login() {
       const res = await signinUser(email, password)
 
       if (res && res.success) {
-        sessionStorage.setItem(
-          'userToken',
-          res.data?.session.refresh_token as string
-        )
-
-        useAuthStore
-          .getState()
-          .setUserToken(res.data?.session.access_token as string)
-
         toast.success('로그인 성공!')
-        console.log(res.data)
         navigate('/')
       } else {
         toast.error('로그인 실패: ' + (res?.error || '알 수 없는 오류'))

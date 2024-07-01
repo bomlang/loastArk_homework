@@ -1,4 +1,4 @@
-import { checkRade } from './checkRade'
+import { CheckRade } from './checkRade'
 
 export interface Characters {
   CharacterClassName: string
@@ -12,5 +12,5 @@ export interface Characters {
   ItemMaxLevel: string
   PvpGradeName: string
   ServerName: string
-  bossData: checkRade[]
+  bossData: CheckRade
 }

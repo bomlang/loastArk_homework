@@ -73,7 +73,7 @@ export default function SignUp() {
 
         toast.success('Sign up successful!')
         console.log(res.data)
-        navigate('/login') // Navigate to login page after successful sign up
+        navigate('/login')
       } else {
         toast.error('Sign up failed: ' + (res?.error || 'Unknown error'))
       }

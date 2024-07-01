@@ -1,4 +1,4 @@
-export interface checkRade {
+export interface CheckRade {
   Abrelshud: boolean
   Biackiss: boolean
   Echidna: boolean

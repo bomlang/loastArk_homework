@@ -55,7 +55,7 @@ export const getPlayerUsername = async (email: string) => {
     return null
   }
 
-  return username
+  return username.username
 }
 
 const getPlayerCharListData = async (username: string) => {
