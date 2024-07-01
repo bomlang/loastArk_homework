@@ -9,10 +9,11 @@ import TableRow from '@mui/material/TableRow'
 import { RadeCheckbox } from './RadeCheckbox'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
-import { loadCheckRade } from '../api/supabase'
+import { getUser, loadCheckRade } from '../api/supabase'
 import TableContainer from '@mui/material/TableContainer'
-import { getPlayerData } from '../api/supabase/playerDataApi'
+import { getPlayerData, getPlayerUsername } from '../api/supabase/playerDataApi'
 import TableCell, { tableCellClasses } from '@mui/material/TableCell'
+import { useAuthStore } from '../zustand/authStore'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -62,13 +63,23 @@ export function CheckTableMui({ charList }: checkTableProps) {
   }
 
   const [mergeCharData, setMergeCheckData] = useState<Characters[] | null>(null)
+  const { userToken: token } = useAuthStore()
 
   useEffect(() => {
     const supabaseFetch = async () => {
       try {
-        const playerData = await getPlayerData()
+        const userData = await getUser(token as string)
+        console.log(userData)
+        console.log(token)
+
+        const username = await getPlayerUsername(userData?.user.email as string)
+        // console.log(username)
+
+        const playerData = await getPlayerData(username as string)
+
+        // 이 부분에서 어떤플레이어인지 로그인정보를 확인한다.
         if (playerData) {
-          const characterDataPromises = playerData[0].charList.map(
+          const characterDataPromises = playerData.charList.map(
             async charName => {
               const response = await axios.get(
                 `${URL}/armories/characters/${encodeURI(charName)}/profiles`,

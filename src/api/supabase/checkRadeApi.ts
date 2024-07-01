@@ -42,19 +42,6 @@ export const updateCheckRade = async (
   }
 }
 
-// const rowData = {
-//   userCharName: '기상',
-//   Valtan: true,
-//   Biackiss: false,
-//   Kouku_Saton: true,
-//   Abrelshud: false,
-//   Kayangel: false,
-//   Illiakan: true,
-//   Ivory_Tower: true,
-//   Kamen: false,
-//   Echidna: true
-// }
-
 export const insertRadeRowData = async (charNameToAdd: string) => {
   try {
     const { error } = await supabase

@@ -4,11 +4,16 @@ import { CheckTableMui } from '../components'
 import { styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
 import { useEffect, useRef, useState } from 'react'
-import { useAuthStore } from '../zustand/authStore'
-import { insertRadeRowData } from '../api/supabase'
+// import { useAuthStore } from '../zustand/authStore'
+import { getUser, insertRadeRowData } from '../api/supabase'
 import { Box, Button, TextField, Typography } from '@mui/material'
 import { getLoastArkCharData } from '../api/loastArkAPI/getCharDataAPI'
-import { addCharFromPlaterData } from '../api/supabase/playerDataApi'
+import {
+  addCharFromPlaterData
+  // getPlayerData,
+  // getPlayerUsername
+} from '../api/supabase/playerDataApi'
+import { useAuthStore } from '../zustand/authStore'
 
 const StyledBox = styled(Box)({
   display: 'flex',
@@ -39,7 +44,9 @@ const style = {
 export default function Home() {
   const navigate = useNavigate()
   const inputRef = useRef<HTMLInputElement | null>(null)
-  const userToken = useAuthStore(state => state.userToken)
+  // const refreshrToken = useAuthStore(state => state.userToken)
+  // const token = sessionStorage.getItem('userToken')
+  const { userToken: token } = useAuthStore()
 
   const [open, setOpen] = useState(false)
   const [charList, setCharList] = useState<string[]>([])
@@ -53,6 +60,11 @@ export default function Home() {
 
       const res = await getLoastArkCharData(value)
       if (res) {
+        const userData = await getUser(token as string)
+        console.log(userData)
+
+        // const username = await getPlayerUsername(userData?.user.email as string)
+
         const registerChar = await addCharFromPlaterData(value, '호')
         if (registerChar) {
           await insertRadeRowData(value)
@@ -65,13 +77,13 @@ export default function Home() {
 
   useEffect(() => {
     const verifyLoginStatus = () => {
-      if (!userToken) {
+      if (!token) {
         navigate('/login')
       }
     }
 
     verifyLoginStatus()
-  }, [userToken, navigate])
+  }, [token, navigate])
 
   return (
     <>

@@ -11,6 +11,7 @@ import {
   FormGroup
 } from '@mui/material'
 import { signUpSupabaseWithEmail } from '../api/supabase'
+import { insertPlayer } from '../api/supabase/playerDataApi'
 
 const StyleMain = styled.main`
   border: 6px solid slateblue;
@@ -43,6 +44,7 @@ export default function SignUp() {
 
   const [isButtonDisabled, setIsButtonDisabled] = useState(true)
   const [formState, setFormState] = useState({
+    username: '',
     email: '',
     password: '',
     confirmPassword: ''
@@ -58,7 +60,7 @@ export default function SignUp() {
 
   const handleSignUpSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const { email, password, confirmPassword } = formState
+    const { username, email, password, confirmPassword } = formState
     if (password !== confirmPassword) {
       toast.error('Passwords do not match')
       return
@@ -67,6 +69,8 @@ export default function SignUp() {
       const res = await signUpSupabaseWithEmail(email, password)
 
       if (res && res.success) {
+        await insertPlayer(username, email)
+
         toast.success('Sign up successful!')
         console.log(res.data)
         navigate('/login') // Navigate to login page after successful sign up
@@ -92,6 +96,18 @@ export default function SignUp() {
         <StyledForm
           method="POST"
           onSubmit={handleSignUpSubmit}>
+          <StyledFormGroup>
+            <InputLabel htmlFor="text">이름</InputLabel>
+            <TextField
+              type="text"
+              name="username"
+              id="username"
+              label="Username"
+              variant="standard"
+              onChange={handleInputChange}
+              sx={{ width: '350px' }}
+            />
+          </StyledFormGroup>
           <StyledFormGroup>
             <InputLabel htmlFor="email">이메일</InputLabel>
             <TextField

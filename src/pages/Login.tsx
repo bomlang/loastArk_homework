@@ -54,17 +54,20 @@ export default function Login() {
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     const { email, password } = formState
+
     try {
       const res = await signinUser(email, password)
 
       if (res && res.success) {
         sessionStorage.setItem(
           'userToken',
-          res.data?.session.access_token as string
+          res.data?.session.refresh_token as string
         )
+
         useAuthStore
           .getState()
           .setUserToken(res.data?.session.access_token as string)
+
         toast.success('로그인 성공!')
         console.log(res.data)
         navigate('/')
