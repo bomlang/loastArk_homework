@@ -1,19 +1,11 @@
 import Paper from '@mui/material/Paper'
-// import { jobShumbnail } from '../utils'
-import TableRow from '@mui/material/TableRow'
-// import { RadeCheckbox } from './RadeCheckbox'
-import TableCell, { tableCellClasses } from '@mui/material/TableCell'
-import {
-  Table,
-  // TableBody,
-  TableContainer,
-  TableHead,
-  styled
-} from '@mui/material'
-import { useEffect, useState } from 'react'
-import { getAllCharListData } from '../api/supabase/playerDataApi'
-import { PartialPlayerData } from '../types'
 import AllTableRow from './AllTableRow'
+import { useEffect, useState } from 'react'
+import { PartialPlayerData } from '../types'
+import TableRow from '@mui/material/TableRow'
+import { getAllCharListData } from '../api/supabase/playerDataApi'
+import TableCell, { tableCellClasses } from '@mui/material/TableCell'
+import { Table, TableContainer, TableHead, styled } from '@mui/material'
 
 export default function AllTable() {
   const [allCharacterData, setAllChaacterrData] = useState<
@@ -24,7 +16,6 @@ export default function AllTable() {
     const dataFetching = async () => {
       try {
         const playerData = await getAllCharListData()
-        // console.log(playerData)
         setAllChaacterrData(playerData)
       } catch (error) {
         console.error(
@@ -62,14 +53,12 @@ export default function AllTable() {
             <StyledTableCell>에키드나</StyledTableCell>
           </TableRow>
         </TableHead>
-        {/* <TableBody> */}
         {allCharacterData?.map((player, index) => (
           <AllTableRow
             player={player}
             key={index}
           />
         ))}
-        {/* </TableBody> */}
       </Table>
     </TableContainer>
   )
@@ -86,27 +75,3 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     textAlign: 'center'
   }
 }))
-
-// const StyledTableRow = styled(TableRow)(({ theme }) => ({
-//   '&:nth-of-type(odd)': {
-//     backgroundColor: theme.palette.action.hover
-//   },
-//   '&:last-child td, &:last-child th': {
-//     border: 0
-//   },
-//   '& .MuiCheckbox-root': {
-//     display: 'flex',
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   }
-// }))
-
-// const StyledFigure = styled('figure')({
-//   display: 'flex',
-//   flexDirection: 'column',
-//   gap: '8px',
-//   justifyContent: 'center',
-//   alignItems: 'center',
-//   fontSize: '14px',
-//   fontWeight: '700'
-// })

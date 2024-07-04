@@ -14,32 +14,6 @@ import {
 } from '../api/supabase/playerDataApi'
 import AllTable from '../components/AllTable'
 
-const StyledBox = styled(Box)({
-  display: 'flex',
-  gap: 4,
-  marginBottom: '20px'
-})
-
-const StyledButton = styled(Button)({
-  backgroundColor: 'black',
-  '&:hover': {
-    backgroundColor: '#F9F7E8',
-    color: '#222'
-  }
-})
-
-const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4
-}
-
 export default function Home() {
   const navigate = useNavigate()
   const inputRef = useRef<HTMLInputElement | null>(null)
@@ -135,4 +109,30 @@ export default function Home() {
       <Footer />
     </>
   )
+}
+
+const StyledBox = styled(Box)({
+  display: 'flex',
+  gap: 4,
+  marginBottom: '20px'
+})
+
+const StyledButton = styled(Button)({
+  backgroundColor: 'black',
+  '&:hover': {
+    backgroundColor: '#F9F7E8',
+    color: '#222'
+  }
+})
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4
 }

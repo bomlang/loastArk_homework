@@ -5,8 +5,8 @@ import { RadeCheckbox } from './RadeCheckbox'
 import TableCell from '@mui/material/TableCell'
 import { loadCheckRade } from '../api/supabase'
 import { Characters, PartialPlayerData } from '../types'
-import { getLoastArkCharData } from '../api/loastArkAPI/getCharDataAPI'
 import { Box, TableBody, Typography, styled } from '@mui/material'
+import { getLoastArkCharData } from '../api/loastArkAPI/getCharDataAPI'
 
 interface AllTableRowProps {
   player: PartialPlayerData
@@ -20,6 +20,12 @@ export default function AllTableRow({ player }: AllTableRowProps) {
   useEffect(() => {
     const loastArkCharacterDataFetch = async () => {
       try {
+        if (!charList || charList.length === 0) {
+          // charList가 null일 수도 있습니다. 에러를 방지하기 위하여 해당 if문을 사용합니다.
+          setCharacterData([])
+          return
+        }
+
         const characterDataPromises = charList.map(async characterName => {
           const charData = await getLoastArkCharData(characterName)
           const bossData = await loadCheckRade(characterName)
@@ -38,11 +44,10 @@ export default function AllTableRow({ player }: AllTableRowProps) {
 
     loastArkCharacterDataFetch()
   }, [charList])
-
   return (
     <TableBody>
-      {characterData?.map(character => (
-        <StyledTableRow>
+      {characterData?.map((character, index) => (
+        <StyledTableRow key={index}>
           <TableCell>
             <Box sx={{ p: 1, textAlign: 'center' }}>
               <Typography variant="h6">{username}</Typography>

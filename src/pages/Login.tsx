@@ -7,32 +7,6 @@ import { useNavigate } from 'react-router-dom'
 import { Button, InputLabel } from '@mui/material'
 import { Box, Link, TextField } from '@mui/material'
 
-const StyleMain = styled.main`
-  border: 6px solid slateblue;
-  margin: 5% auto 50px;
-  padding: 40px;
-  width: auto;
-  height: 410px;
-  max-width: 800px;
-`
-
-const StyleBox = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 2px;
-  margin-bottom: 30px;
-`
-
-const StyledForm = styled.form`
-  max-width: 350px;
-`
-
-const StyledFormGroup = styled(FormGroup)`
-  max-width: 350px;
-  margin: 20px 0;
-`
-
 export default function Login() {
   const navigate = useNavigate()
 
@@ -128,3 +102,29 @@ export default function Login() {
     </StyleMain>
   )
 }
+
+const StyleMain = styled.main`
+  border: 6px solid slateblue;
+  margin: 5% auto 50px;
+  padding: 40px;
+  width: auto;
+  height: 410px;
+  max-width: 800px;
+`
+
+const StyleBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 2px;
+  margin-bottom: 30px;
+`
+
+const StyledForm = styled.form`
+  max-width: 350px;
+`
+
+const StyledFormGroup = styled(FormGroup)`
+  max-width: 350px;
+  margin: 20px 0;
+`

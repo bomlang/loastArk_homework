@@ -20,13 +20,18 @@ interface checkTableProps {
 }
 
 export function CheckTableMui({ charList }: checkTableProps) {
-  const { userToken } = useAuthStore()
+  const { userToken: token } = useAuthStore()
   const [mergeCharData, setMergeCheckData] = useState<Characters[] | null>(null)
 
   useEffect(() => {
     const supabaseFetch = async (accessToken: string) => {
       try {
         const userData = await getUser(accessToken)
+        if (!userData) {
+          console.error('사용자의 데이터가 존재하지 않습니다.')
+          return
+        }
+
         const username = await getPlayerUsername(userData.email as string)
         const playerData = await getPlayerData(username)
 
@@ -48,21 +53,25 @@ export function CheckTableMui({ charList }: checkTableProps) {
 
     const refreshToken = sessionStorage.getItem('refreshToken')
 
-    if (!userToken && refreshToken) {
+    if (!token && refreshToken) {
       refreshAccessToken(refreshToken).then(newAccessToken => {
         if (newAccessToken) {
           supabaseFetch(newAccessToken)
+        } else {
+          console.error('토큰을 가져오는데 실패하였습니다.')
         }
       })
-    } else if (userToken) {
-      supabaseFetch(userToken)
+    } else if (token) {
+      supabaseFetch(token)
+    } else {
+      console.error('No valid token available')
     }
-  }, [charList, userToken])
+  }, [charList, token])
 
   return (
     <TableContainer
       component={Paper}
-      sx={{ maxHeight: 700 }}>
+      sx={{ maxHeight: 900 }}>
       <Table
         stickyHeader
         sx={{ minWidth: 700 }}
@@ -87,7 +96,7 @@ export function CheckTableMui({ charList }: checkTableProps) {
           {mergeCharData &&
             mergeCharData?.map((char, index) => (
               <StyledTableRow key={index}>
-                <TableCell align="right">
+                <TableCell align="center">
                   <span>{char.CharacterName}</span>
                 </TableCell>
                 <TableCell>
@@ -101,7 +110,7 @@ export function CheckTableMui({ charList }: checkTableProps) {
                     <figcaption>{char.CharacterClassName}</figcaption>
                   </StyledFigure>
                 </TableCell>
-                <TableCell>
+                <TableCell sx={{ fontSize: 16, fontWeight: 500 }}>
                   <span>{char.ItemMaxLevel}</span>
                 </TableCell>
                 <RadeCheckbox
