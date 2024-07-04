@@ -6,12 +6,14 @@ interface RadeCheckboxProps {
   bossName: string
   isChecked: boolean
   characterName: string
+  disabled?: boolean
 }
 
 export function RadeCheckbox({
   bossName,
   isChecked,
-  characterName
+  characterName,
+  disabled
 }: RadeCheckboxProps) {
   const [isRadeCheck, setIsRadeCheck] = useState(isChecked)
 
@@ -19,7 +21,6 @@ export function RadeCheckbox({
     try {
       const res = await updateCheckRade(isRadeCheck, characterName, bossName)
 
-      console.log(res)
       if (res) {
         setIsRadeCheck(prevState => !prevState)
       }
@@ -36,6 +37,7 @@ export function RadeCheckbox({
       <Checkbox
         checked={isRadeCheck}
         onChange={handleClickChecked}
+        disabled={disabled}
       />
     </TableCell>
   )

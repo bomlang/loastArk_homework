@@ -1,5 +1,5 @@
 import { supabase } from './client'
-import { PlayerData } from '../../types'
+import { PartialPlayerData, PlayerData } from '../../types'
 
 export const getPlayerData = async (
   username: string
@@ -78,7 +78,7 @@ export const addCharFromPlaterData = async (
   username: string
 ) => {
   try {
-    const latestCharList = await getPlayerCharListData(username)
+    const latestCharList = (await getPlayerCharListData(username)) || []
 
     if (latestCharList.includes(charNameToAdd)) {
       console.error('중복된 캐릭터 닉네임입니다.')
@@ -102,6 +102,31 @@ export const addCharFromPlaterData = async (
   } catch (error) {
     console.error(
       '플레이어의 캐릭터를 추가하는데 예상치 못한 오류가 발생하였습니다.',
+      error
+    )
+  }
+}
+
+export const getAllCharListData = async (): Promise<
+  PartialPlayerData[] | undefined
+> => {
+  try {
+    const { data, error } = await supabase
+      .from('player')
+      .select('username ,charList')
+
+    if (error) {
+      console.error(
+        'player테이블의 데이터를 가져오는데 오류가 발생하였습니다.',
+        error
+      )
+      return
+    }
+
+    return data
+  } catch (error) {
+    console.error(
+      'player테이블의 데이터를 가져오는데 오류가 발생하였습니다.',
       error
     )
   }

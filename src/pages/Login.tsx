@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react'
 import { signinUser } from '../api/supabase'
 import { useNavigate } from 'react-router-dom'
 import { Button, InputLabel } from '@mui/material'
-import { useAuthStore } from '../zustand/authStore'
 import { Box, Link, TextField } from '@mui/material'
 
 const StyleMain = styled.main`

@@ -1,4 +1,4 @@
 export * from './Loading'
-export * from './CheckTable'
+export * from './AllTable'
 export * from './RadeCheckbox'
 export * from './CheckTableMui'

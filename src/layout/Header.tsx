@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
-import { AppBar, Toolbar, Typography, Button, styled } from '@mui/material'
+import { Link as RouterLink } from 'react-router-dom'
+import { Link as MuiLink, Button, AppBar, Toolbar, styled } from '@mui/material'
 
 const StyledAppBar = styled(AppBar)({
   backgroundColor: '#fff',
@@ -9,8 +9,11 @@ const StyledAppBar = styled(AppBar)({
   marginBottom: '30px'
 })
 
-const StyledTypography = styled(Typography)({
-  flexGrow: 1
+const StyledMuiLink = styled(MuiLink)({
+  textDecoration: 'none',
+  color: 'black',
+  fontWeight: '700',
+  fontSize: '24px'
 })
 
 export function Header() {
@@ -24,26 +27,33 @@ export function Header() {
   return (
     <StyledAppBar position="static">
       <Toolbar>
-        <StyledTypography variant="h6">로악귀들의 숙제체크</StyledTypography>
+        <StyledMuiLink
+          href="/"
+          sx={{ flexGrow: 1 }}>
+          로악귀들의 숙제체크
+        </StyledMuiLink>
         {isLoggedIn ? (
           <Button
+            variant="text"
             color="inherit"
-            component={Link}
+            component={RouterLink}
             to="/login">
             로그인
           </Button>
         ) : (
           <Button
+            variant="text"
             color="inherit"
-            component={Link}
+            component={RouterLink}
             to="/login"
             onClick={handleLogout}>
             로그아웃
           </Button>
         )}
         <Button
+          variant="text"
           color="inherit"
-          component={Link}
+          component={RouterLink}
           to="/signup">
           회원가입
         </Button>

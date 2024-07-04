@@ -15,42 +15,6 @@ import { getLoastArkCharData } from '../api/loastArkAPI/getCharDataAPI'
 import { getUser, loadCheckRade, refreshAccessToken } from '../api/supabase'
 import { getPlayerData, getPlayerUsername } from '../api/supabase/playerDataApi'
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
-    textAlign: 'center'
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-    textAlign: 'center'
-  }
-}))
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover
-  },
-  '&:last-child td, &:last-child th': {
-    border: 0
-  },
-  '& .MuiCheckbox-root': {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
-  }
-}))
-
-const StyledFigure = styled('figure')({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '8px',
-  justifyContent: 'center',
-  alignItems: 'center',
-  fontSize: '14px',
-  fontWeight: '700'
-})
-
 interface checkTableProps {
   charList: string[]
 }
@@ -96,10 +60,13 @@ export function CheckTableMui({ charList }: checkTableProps) {
   }, [charList, userToken])
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer
+      component={Paper}
+      sx={{ maxHeight: 700 }}>
       <Table
+        stickyHeader
         sx={{ minWidth: 700 }}
-        aria-label="customized table">
+        aria-label="sticky table">
         <TableHead>
           <TableRow>
             <StyledTableCell>닉네임</StyledTableCell>
@@ -189,3 +156,39 @@ export function CheckTableMui({ charList }: checkTableProps) {
     </TableContainer>
   )
 }
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+    textAlign: 'center'
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    textAlign: 'center'
+  }
+}))
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover
+  },
+  '&:last-child td, &:last-child th': {
+    border: 0
+  },
+  '& .MuiCheckbox-root': {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
+}))
+
+const StyledFigure = styled('figure')({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '8px',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontSize: '14px',
+  fontWeight: '700'
+})

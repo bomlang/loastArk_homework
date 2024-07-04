@@ -5,3 +5,5 @@ export interface PlayerData {
   charList: string[]
   created_at: string
 }
+
+export type PartialPlayerData = Pick<PlayerData, 'username' | 'charList'>
