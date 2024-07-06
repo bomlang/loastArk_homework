@@ -1,4 +1,5 @@
 import Modal from '@mui/material/Modal'
+import { toast } from 'react-hot-toast'
 import { Header, Footer } from '../layout'
 import { CheckTableMui } from '../components'
 import { styled } from '@mui/material/styles'
@@ -30,16 +31,30 @@ export default function Home() {
     if (inputRef.current) {
       const value = inputRef.current.value
 
-      const res = await getLoastArkCharData(value)
-      if (res) {
-        const userData = await getUser(token as string)
-        const username = await getPlayerUsername(userData?.email as string)
-        const registerChar = await addCharFromPlaterData(value, username)
-        if (registerChar) {
-          await insertRadeRowData(value)
-          setCharList(prevCharList => [...prevCharList, value])
-          handleClose()
+      try {
+        const res = await getLoastArkCharData(value)
+        if (res) {
+          const userData = await getUser(token as string)
+          const username = await getPlayerUsername(userData?.email as string)
+          const registerChar = await addCharFromPlaterData(value, username)
+          if (registerChar) {
+            // 중복 확인 및 행 추가 함수 호출
+            const result = await insertRadeRowData(value)
+            if (result === 'exists') {
+              toast.error('이미 존재하는 닉네임입니다.')
+            } else {
+              toast.success('캐릭터가 성공적으로 등록되었습니다.')
+              setCharList(prevCharList => [...prevCharList, value])
+              handleClose()
+            }
+          } else {
+            toast.error('캐릭터 등록 중 오류가 발생하였습니다.')
+          }
+        } else {
+          toast.error('캐릭터 정보를 가져오는 중 오류가 발생하였습니다.')
         }
+      } catch (error) {
+        toast.error('캐릭터 등록 중 오류가 발생하였습니다.')
       }
     }
   }
