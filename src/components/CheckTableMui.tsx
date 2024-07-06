@@ -124,7 +124,7 @@ export function CheckTableMui({ charList }: checkTableProps) {
                   <span>{char.ItemMaxLevel}</span>
                 </TableCell>
                 <RadeCheckbox
-                  bossName="Valtan"
+                  bossName={'Valtan'}
                   isChecked={char.bossData.Valtan}
                   characterName={char.CharacterName}
                 />

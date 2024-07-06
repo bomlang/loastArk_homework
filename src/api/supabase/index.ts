@@ -1,3 +1,3 @@
 export * from './client'
+export * from './radeApi'
 export * from './userAuthApis'
-export * from './checkRadeApi'
