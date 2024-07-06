@@ -1,9 +1,10 @@
 import { Characters } from '../types'
+import { Button, styled } from '@mui/material'
 import Table from '@mui/material/Table'
 import Paper from '@mui/material/Paper'
 import { jobShumbnail } from '../utils'
 import { useEffect, useState } from 'react'
-import { styled } from '@mui/material/styles'
+import emotionStyled from '@emotion/styled'
 import TableRow from '@mui/material/TableRow'
 import { RadeCheckbox } from './RadeCheckbox'
 import TableBody from '@mui/material/TableBody'
@@ -78,6 +79,7 @@ export function CheckTableMui({ charList }: checkTableProps) {
         aria-label="sticky table">
         <TableHead>
           <TableRow>
+            <StyledTableCell></StyledTableCell>
             <StyledTableCell>닉네임</StyledTableCell>
             <StyledTableCell>클래스</StyledTableCell>
             <StyledTableCell>Lv.</StyledTableCell>
@@ -96,6 +98,14 @@ export function CheckTableMui({ charList }: checkTableProps) {
           {mergeCharData &&
             mergeCharData?.map((char, index) => (
               <StyledTableRow key={index}>
+                <TableCell>
+                  <Button>
+                    <DeleteImg
+                      src="https://static.thenounproject.com/png/16504-200.png"
+                      alt="캐릭터 삭제"
+                    />
+                  </Button>
+                </TableCell>
                 <TableCell align="center">
                   <span>{char.CharacterName}</span>
                 </TableCell>
@@ -201,3 +211,8 @@ const StyledFigure = styled('figure')({
   fontSize: '14px',
   fontWeight: '700'
 })
+
+const DeleteImg = emotionStyled.img`
+  width: 24px;
+  height: 24px;
+`
