@@ -13,32 +13,6 @@ import {
 import { signUpSupabaseWithEmail } from '../api/supabase'
 import { insertPlayer } from '../api/supabase/playerDataApi'
 
-const StyleMain = styled.main`
-  border: 6px solid slateblue;
-  margin: 5% auto 50px;
-  padding: 40px;
-  width: auto;
-  height: auto;
-  max-width: 800px;
-`
-
-const StyleBox = styled(Box)`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border-radius: 2px;
-  margin-bottom: 30px;
-`
-
-const StyledForm = styled.form`
-  max-width: 350px;
-`
-
-const StyledFormGroup = styled(FormGroup)`
-  max-width: 350px;
-  margin: 20px 0;
-`
-
 export default function SignUp() {
   const navigate = useNavigate()
 
@@ -75,7 +49,7 @@ export default function SignUp() {
         console.log(res.data)
         navigate('/login')
       } else {
-        toast.error('Sign up failed: ' + (res?.error || 'Unknown error'))
+        toast.error('❌ 회원가입에 실패하였습니다. 관리자에게 문의하세요.')
       }
     } catch (error) {
       console.error('Sign up error:', error)
@@ -162,3 +136,29 @@ export default function SignUp() {
     </StyleMain>
   )
 }
+
+const StyleMain = styled.main`
+  border: 6px solid slateblue;
+  margin: 5% auto 50px;
+  padding: 40px;
+  width: auto;
+  height: auto;
+  max-width: 800px;
+`
+
+const StyleBox = styled(Box)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 2px;
+  margin-bottom: 30px;
+`
+
+const StyledForm = styled.form`
+  max-width: 350px;
+`
+
+const StyledFormGroup = styled(FormGroup)`
+  max-width: 350px;
+  margin: 20px 0;
+`
