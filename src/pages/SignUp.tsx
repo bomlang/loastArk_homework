@@ -42,14 +42,14 @@ export default function SignUp() {
     try {
       const res = await signUpSupabaseWithEmail(email, password)
 
-      if (res && res.success) {
+      if (res.success) {
         await insertPlayer(username, email)
-
         toast.success('Sign up successful!')
-        console.log(res.data)
         navigate('/login')
       } else {
-        toast.error('❌ 회원가입에 실패하였습니다. 관리자에게 문의하세요.')
+        toast.error(
+          res.error || '❌ 회원가입에 실패하였습니다. 관리자에게 문의하세요.'
+        )
       }
     } catch (error) {
       console.error('Sign up error:', error)
