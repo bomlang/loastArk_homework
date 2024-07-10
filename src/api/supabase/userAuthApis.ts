@@ -26,7 +26,7 @@ export const signUpSupabaseWithEmail = async (
   }
 }
 
-export const getUser = async (accessToken: string) => {
+export const getUser = async (accessToken: string | null) => {
   try {
     const response = await axios.get(
       'https://ukvtwsfrzgcxhfkuqjan.supabase.co/auth/v1/user',

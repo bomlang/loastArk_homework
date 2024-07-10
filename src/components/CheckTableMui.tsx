@@ -3,10 +3,9 @@ import Table from '@mui/material/Table'
 import Paper from '@mui/material/Paper'
 import { jobShumbnail } from '../utils'
 import { useEffect, useState } from 'react'
-import emotionStyled from '@emotion/styled'
+import { styled } from '@mui/material/styles'
 import TableRow from '@mui/material/TableRow'
 import { RadeCheckbox } from './RadeCheckbox'
-import { Button, styled } from '@mui/material'
 import TableBody from '@mui/material/TableBody'
 import TableHead from '@mui/material/TableHead'
 import { useAuthStore } from '../zustand/authStore'
@@ -40,11 +39,14 @@ export function CheckTableMui({ charList }: checkTableProps) {
           const characterDataPromises = await Promise.all(
             playerData.charList.map(async charName => {
               const charactorsData = await getLoastArkCharData(charName)
+              console.log(charactorsData)
+
               const bossData = await loadCheckRade(charName)
 
               return { ...charactorsData, bossData }
             })
           )
+
           setMergeCheckData(characterDataPromises as Characters[])
         }
       } catch (error) {
@@ -79,7 +81,6 @@ export function CheckTableMui({ charList }: checkTableProps) {
         aria-label="sticky table">
         <TableHead>
           <TableRow>
-            <StyledTableCell></StyledTableCell>
             <StyledTableCell>닉네임</StyledTableCell>
             <StyledTableCell>클래스</StyledTableCell>
             <StyledTableCell>Lv.</StyledTableCell>
@@ -98,14 +99,6 @@ export function CheckTableMui({ charList }: checkTableProps) {
           {mergeCharData &&
             mergeCharData?.map((char, index) => (
               <StyledTableRow key={index}>
-                <TableCell>
-                  <Button>
-                    <DeleteImg
-                      src="https://static.thenounproject.com/png/16504-200.png"
-                      alt="캐릭터 삭제"
-                    />
-                  </Button>
-                </TableCell>
                 <TableCell align="center">
                   <span>{char.CharacterName}</span>
                 </TableCell>
@@ -124,7 +117,7 @@ export function CheckTableMui({ charList }: checkTableProps) {
                   <span>{char.ItemMaxLevel}</span>
                 </TableCell>
                 <RadeCheckbox
-                  bossName={'Valtan'}
+                  bossName="Valtan"
                   isChecked={char.bossData.Valtan}
                   characterName={char.CharacterName}
                 />
@@ -211,8 +204,3 @@ const StyledFigure = styled('figure')({
   fontSize: '14px',
   fontWeight: '700'
 })
-
-const DeleteImg = emotionStyled.img`
-  width: 24px;
-  height: 24px;
-`
