@@ -22,7 +22,7 @@ export default function Home() {
 
   const [open, setOpen] = useState(false)
   const [toggleTable, setToggleTable] = useState(false)
-  // const [charList, setCharList] = useState<string[]>([])
+  const [charList, setCharList] = useState<string[]>([])
 
   const handleOpen = () => setOpen(true)
   const handleClose = () => setOpen(false)
@@ -44,7 +44,7 @@ export default function Home() {
               toast.error('이미 존재하는 닉네임입니다.')
             } else {
               toast.success('캐릭터가 성공적으로 등록되었습니다.')
-              // setCharList(prevCharList => [...prevCharList, value])
+              setCharList(prevCharList => [...prevCharList, value])
               handleClose()
             }
           } else {
@@ -118,7 +118,7 @@ export default function Home() {
             </StyledButton>
           </StyledBox>
 
-          {toggleTable ? <AllTable /> : <CheckTableMui />}
+          {toggleTable ? <AllTable /> : <CheckTableMui charList={charList} />}
         </section>
       </main>
       <Footer />

@@ -39,8 +39,6 @@ export function CheckTableMui({ charList }: checkTableProps) {
           const characterDataPromises = await Promise.all(
             playerData.charList.map(async charName => {
               const charactorsData = await getLoastArkCharData(charName)
-              console.log(charactorsData)
-
               const bossData = await loadCheckRade(charName)
 
               return { ...charactorsData, bossData }
